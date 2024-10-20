@@ -1,0 +1,54 @@
+---
+title: "R-4.4.1-NM_Examination"
+---
+
+```{r API}
+
+library(rjson)
+library(httr)
+
+base_url <- "http://http://apis.data.go.kr/B551182/mdlrtActionInfoService"
+call_url <- "getMdlrtActionInfoList"
+method <- "GET"
+API_Key_encoding <- "DRwFWZ%2Fjfi6551teJKgRhkKgC%2BXhcjobN%2BccY2MQdF9yZdx8xL5Kn4IljljMCWGsl2ObEco%2Frm21r14CN7iG0g%3D%3D"
+API_Key_decoding <- "DRwFWZ/jfi6551teJKgRhkKgC+XhcjobN+ccY2MQdF9yZdx8xL5Kn4IljljMCWGsl2ObEco/rm21r14CN7iG0g=="
+
+params <- list(
+  serviceKey = API_Key_decoding,
+  pageNo = 1,
+  numOfRows = 10,
+  resultType = "json",
+  year = 2023,
+  stdType = 1,
+  st5Cd = "HK010"
+)
+
+# API 데이터를 다운로드하는 함수
+download_api_data <- function() {
+  # base_url <- "http://apis.data.go.kr/B551172/getDiagnosisRemoteCancerous"
+  # call_url <- "AllCancerRemoteOccurrenceTrend"
+  # method <- "GET"
+  # 
+  # My_API_Key <- "wqdX2OnQY29zYQ7BXsGafDqVNaIbIYUoqAqS1bOeK6/yyqdukiVcRcj25wue+U8tqSaSXThVPwfaWDNpUc6cwQ=="  # 실제 API 키
+  # params <- list(
+  #   serviceKey = My_API_Key,  # 실제 API 키로 변경
+  #   pageNo = 1,
+  #   numOfRows = 10,
+  #   resultType = "json"
+  # )
+  
+  url <- paste0(base_url, "/", call_url)
+  response <- GET(url, query = params)
+  
+  if (status_code(response) == 200) {
+    json_text <- content(response, as = "text")
+    data <- fromJSON(json_text)
+    return(data)
+  } else {
+    print(paste("API 호출 실패:", status_code(response)))
+    return(NULL)
+  }
+}
+
+df <- download_api_data ()
+```
