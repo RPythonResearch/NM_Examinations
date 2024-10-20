@@ -2,5 +2,7 @@
 .Rhistory
 .RData
 .Ruserdata
-
+.Rprofile
+*.Rporj
+renv/
 /.quarto/
